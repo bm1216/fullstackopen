@@ -1,5 +1,10 @@
 title 0.5
 
+note over Browser: 
+execute javascript code in spa.js
+which gets data in /exampleapp/data.json
+and redraws the list of notes
+
 Browser->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa
 Server-->Browser: HTML code for page
 Browser->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
