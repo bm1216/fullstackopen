@@ -1,17 +1,16 @@
-title 0.5
+title 0.6
+
 
 note over Browser: 
-execute javascript code in spa.js
-which gets data in /exampleapp/data.json
-and redraws the list of notes
+1. Form send button is clicked.
+2. Prevent default behaviour of Form
+3. Add note to list of notes in Browser
+4. Redraw notes and send new note to server
+end note over
 
-Browser->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa
-Server-->Browser: HTML code for page
-Browser->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
-Server-->Browser: main.css
-Browser->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa.js
-Server-->Browser: spa.js
-note over Browser: 
-execute javascript code in spa.js
-which gets data in /exampleapp/data.json
-and redraws the list of notes
+Browser->Server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+
+note right of Server: 
+Add new notes to list of notes and add to data.json
+end note right of 
+Server->Browser: {"message": "note created"}
