@@ -1,10 +1,22 @@
 import logo from './logo.svg';
 import './App.css';
+import React,{useState}from 'react';
 
-const App = () => (    // Using round brackets mean that you don't need to have a return
-  <div>
-    <p>Hello World</p>
-  </div> 
-)
+const Hello = () => {
+  return (
+    <div>
+      <p>Hello world</p>
+    </div>
+  )
+}
+
+const App = () => {
+  return (
+    <div>
+      <h1>Greetings</h1>
+      <Hello />
+    </div>
+  )
+}
 
 export default App;
