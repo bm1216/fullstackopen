@@ -1,25 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
-import React, {useState}from 'react';
+import React, {useState} from 'react'
 
-const Hello = (props) => {
+const App = (props) => {
+  const [counter, setCounter] = useState(0)
+
+  const increaseByOne = () => setCounter(counter+1)
+
+  const reset = () => setCounter(0)
+
+  console.log('rendering....', counter)
+
   return (
     <div>
-      <p>Hello {props.name}, you are {props.age} years old</p>
+      {counter}
+      <br/>
+      <button onClick={increaseByOne}> plus </button>
+      <button onClick={reset}>reset</button>
     </div>
   )
 }
 
-const App = () => {
-  const name = "Peter"
-  const age = 10
-  return (
-    <>
-      <h1>Greetings</h1>
-      <Hello name="Barun" age={13+10} />
-      <Hello name={name} age={age}/>
-    </>
-  )
-}
-
-export default App;
+export default App
