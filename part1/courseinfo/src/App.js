@@ -4,25 +4,19 @@ import React from 'react'
 const Header = ({course}) => <><h1>{course}</h1></>
 
 const Content = ({part1, exercises1, part2, exercises2, part3, exercises3}) => {
-  console.log(part1)
   return(
     <>
-      <p>
-        {part1} {exercises1}
-      </p>
-      <p>
-        {part2} {exercises2}
-      </p>
-      <p>
-        {part3} {exercises3}
-      </p>
+        <Part part={part1} numExercises={exercises1}/>
+        <Part part={part2} numExercises={exercises2}/>
+        <Part part={part3} numExercises={exercises3}/>
     </>
   )
 }
 
+const Part = ({part, numExercises}) => <p> {part} {numExercises} </p>
+
 
 const Total = ({total}) => <><p>Number of exercises {total}</p></>
-
 
 
 const App = () => {
