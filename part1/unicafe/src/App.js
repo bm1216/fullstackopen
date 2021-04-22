@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 
-
 const FeedBack = (props) => {
   return (
     <div>
@@ -19,7 +18,6 @@ const Header = ({text}) => {
 }
 
 const FeedbackOptions = (props) => {
-  console.log(props)
   return (
     <div>
       <Button text="good" handleClick={props.handleGood}/>
@@ -49,18 +47,26 @@ const Statistics = (props) => {
 }
 
 const FeedbackStatistics = (props) => {
+  const average = () => {
+    return (props.good*1 + props.bad*-1 + props.neutral*0) /3
+  }
+  
+  const percentageOfPositive = () => {
+    return (props.good/(props.good + props.bad + props.neutral)) * 100
+  }
+
   return(
     <div>
       <Stat text="good" count={props.good}/>
       <Stat text="neutral" count={props.neutral}/>
       <Stat text="bad" count={props.bad}/>
+      <Stat text="average" count={average()}/>
+      <Stat text="positive" count={percentageOfPositive()}/>
     </div>
   )
 }
 
 const Stat = ({text, count}) => <p>{text}  {count}</p>
-
-
 
 const App = () => {
   // save clicks of each button to its own state
