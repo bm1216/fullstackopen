@@ -8,6 +8,19 @@ const Button = ({text, handleClick}) => {
   )
 }
 
+const Anecdote = ({title, anecdote}) => {
+  return (
+    <div>
+      <h1>
+          {title}
+      </h1>
+      <p>{anecdote}</p>
+    </div>
+ 
+  )
+  
+}
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often',
@@ -20,6 +33,7 @@ const App = () => {
    
   const [selected, setSelected] = useState(0)
   const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0))
+  const [highest, setHighest] = useState(0) // this is another way to get the max number of votes
 
   const selectRandom = () => {
     let randomIndex = Math.floor(Math.random() * anecdotes.length)
@@ -29,19 +43,33 @@ const App = () => {
   const handleVote = () => {
     const copy = [...votes]
     copy[selected] += 1
+    // In this way, we can store the highest voted anecdote as a state. 
+    if (copy[selected] > copy[highest]) {
+      setHighest(selected)
+    }
     setVotes(copy)
   }
 
+  // One way to do this would be to have a function that finds the highest votes, and use that. 
+  // const findMostVotes = () => {
+  //   let max = 0;
+  //   for (let i = 0; i < votes.length; i++) {
+  //     if (votes[i] > votes[max]) {
+  //       max = i
+  //     }
+  //   }
+  //   return max
+  // }
+
   return (
     <div>
-      <p>
-        {anecdotes[selected]}
-      </p>
+      <Anecdote title="Anecdote of the day" anecdote={anecdotes[selected]}/>
       <p>
         has {votes[selected]} votes
       </p>
       <Button handleClick={handleVote} text="vote"/>
       <Button handleClick={selectRandom} text="next anecdote"/>
+      <Anecdote title="Anecdote with most votes" anecdote={anecdotes[highest]}/>
     </div>
   )
 }
