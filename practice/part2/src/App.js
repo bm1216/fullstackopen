@@ -1,10 +1,5 @@
 import React from 'react'
-
-const Note = ({note}) => {
-  return (
-    <li>{note.content}</li>
-  )
-}
+import Note from './components/Note'
 
 const App = ({notes}) => {
   // const { notes } = props  dont need to do this as we are only using notes from props
