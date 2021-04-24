@@ -49,7 +49,7 @@ const App = () => {
 
   return (
     <div>
-      <Header course={course.name}/>
+      <Header title={course.name}/>
       <Content parts={course.parts}/>
       <Total parts={course.parts.map(x => x.exercises)}/>  
     </div>
