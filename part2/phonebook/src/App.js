@@ -1,4 +1,7 @@
 import React, { useState } from 'react'
+import PersonForm from './components/PersonForm'
+import Filter from './components/Filter'
+import Persons from './components/Persons'
 
 const App = () => {
   const [ persons, setPersons ] = useState([
@@ -11,6 +14,7 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState('')
   const [ searchString, setSearchString ] = useState('')
 
+  // IMPORTANT!!! If we're deriving data from previous state don't need to create new state. State should only be created when we want a re-render on changing it. 
   const personsToShow = persons.filter((person) => person.name.toLowerCase().includes(searchString.toLowerCase()))
 
   const handleNameChange = (event) => {
@@ -45,9 +49,7 @@ const App = () => {
         name: newName,
         number: newNumber
       }
-
-      let addedPeople = persons.concat(newPerson)
-      setPersons(addedPeople)
+      setPersons(persons.concat(newPerson))
       setNewName('')
       setNewNumber('')
     } else {
@@ -56,31 +58,18 @@ const App = () => {
     
   }
 
+  const formProps = {
+    newName, newNumber, addToPhonebook, handleNameChange, handleNumberChange
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-        filter shown with <input value={searchString} onChange={handleSearchStringChange}/>
-      </div>
-      <br></br>
-      <h2>Add a new </h2>
-      <form onSubmit={addToPhonebook}>
-        <div>
-          name: <input value={newName} onChange={handleNameChange}/>
-        </div>
-        <div>
-          number: <input type="tel" value={newNumber} onChange={handleNumberChange}/>
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
-      <ul>
-        {personsToShow.map((person) => 
-          <li key={person.name}>{person.name}  {person.number}</li>
-        )}
-      </ul>
+      <Filter searchString={searchString} handleSearchStringChange={handleSearchStringChange}/>
+      <h3>Add a new </h3>
+      <PersonForm {...formProps}/>
+      <h3>Numbers</h3>
+      <Persons personsToShow={personsToShow}/>
     </div>
   )
 }
