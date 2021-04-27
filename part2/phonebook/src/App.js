@@ -1,18 +1,17 @@
 import React, { useState } from 'react'
 
-const personList = [
-  { name: 'Arto Hellas', number: '040-1234567' },
-  { name: 'Ada Lovelace', number: '39-44-5323523' },
-  { name: 'Dan Abramov', number: '12-43-234345' },
-  { name: 'Mary Poppendieck', number: '39-23-6423122' }
-]
-
 const App = () => {
-  const [ persons, setPersons ] = useState(personList) 
+  const [ persons, setPersons ] = useState([
+    { name: 'Arto Hellas', number: '040-1234567' },
+    { name: 'Ada Lovelace', number: '39-44-5323523' },
+    { name: 'Dan Abramov', number: '12-43-234345' },
+    { name: 'Mary Poppendieck', number: '39-23-6423122' }
+  ]) 
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ searchString, setSearchString ] = useState('')
-  const [ personsToShow, setPersonsToShow ] = useState(personList)
+
+  const personsToShow = persons.filter((person) => person.name.toLowerCase().includes(searchString.toLowerCase()))
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
@@ -23,10 +22,8 @@ const App = () => {
   }
 
   const handleSearchStringChange = (event) => {
-    console.log('here');
     setSearchString(event.target.value)
     console.log(event.target.value);
-    setPersonsToShow(persons.filter((person) => person.name.toLowerCase().includes(event.target.value.toLowerCase())))
   }
 
   const addToPhonebook = (event) => {
@@ -51,7 +48,6 @@ const App = () => {
 
       let addedPeople = persons.concat(newPerson)
       setPersons(addedPeople)
-      setPersonsToShow(addedPeople)
       setNewName('')
       setNewNumber('')
     } else {
