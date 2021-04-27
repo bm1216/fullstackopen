@@ -1,7 +1,8 @@
 import ReactDOM from 'react-dom'
 import App from './App'
+import Addition from './Addition'
 
-ReactDOM.render(<App />, 
+ReactDOM.render(<Addition />, 
 document.getElementById('root'))
 
 // If you want to start measuring performance in your app, pass a function

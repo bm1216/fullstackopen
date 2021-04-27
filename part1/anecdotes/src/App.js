@@ -49,6 +49,7 @@ const App = () => {
     }
     setVotes(copy)
   }
+  
 
   // One way to do this would be to have a function that finds the highest votes, and use that. 
   // const findMostVotes = () => {
