@@ -8,18 +8,35 @@ const App = () => {
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
+    console.log(newName);
   }
 
   const addToPhonebook = (event) => {
     event.preventDefault()
-    const newPerson = {
-      name: newName
+
+    // the old fashioned way
+    // for (let i = 0; i < persons.length; i++) {
+    //   if (persons[i].name === newName) {
+    //     isInArray = true
+    //     break
+    //   }
+    // }
+
+    // the new hotness
+    const found = persons.findIndex(element => element.name === newName)
+
+    if (found === -1) {
+      const newPerson = {
+        name: newName
+      }
+      setPersons(persons.concat(newPerson))
+      setNewName('')
+    } else {
+      window.alert(`${newName} is already added to the phonebook!`)
     }
-    setPersons(persons.concat(newPerson))
-    setNewName('')
+    
   }
 
-  console.log(persons);
   return (
     <div>
       <h2>Phonebook</h2>
