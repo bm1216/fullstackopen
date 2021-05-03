@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
 import Persons from './components/Persons'
-import axios from 'axios'
+import phoneService from './services/Phonebook'
+
 
 const App = () => {
   const [ persons, setPersons ] = useState([]) 
@@ -11,10 +12,10 @@ const App = () => {
   const [ searchString, setSearchString ] = useState('')
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
+    phoneService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
       })    
   }, [])
 
@@ -32,6 +33,15 @@ const App = () => {
   const handleSearchStringChange = (event) => {
     setSearchString(event.target.value)
     console.log(event.target.value);
+  }
+
+  const deleteFromPhonebook = (id) => {
+    phoneService
+      .deleteEntry(id)
+      .then(response => {
+        console.log(response);
+        setPersons(persons.filter(p => p.id !== id))
+      })
   }
 
   const addToPhonebook = (event) => {
@@ -53,11 +63,30 @@ const App = () => {
         name: newName,
         number: newNumber
       }
-      setPersons(persons.concat(newPerson))
-      setNewName('')
-      setNewNumber('')
+      phoneService
+        .createEntry(newPerson)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+          setNewName('')
+          setNewNumber('')
+        })
     } else {
-      window.alert(`${newName} is already added to the phonebook!`)
+      if (window.confirm(`${newName} is already defined in the phonebook, replace the old number with a new one?`)) {
+        const newPerson = {
+          ...persons[found],
+          number: newNumber,
+        }
+        console.log(newPerson);
+        phoneService
+          .updateEntry(newPerson.id, newPerson)
+          .then(returnedPerson => {
+            setPersons(persons.map(p => p.id !== newPerson.id ? p : returnedPerson))
+            setNewName('')
+            setNewNumber('')
+          })
+      } else {
+        return null
+      } 
     }
     
   }
@@ -73,7 +102,7 @@ const App = () => {
       <h3>Add a new </h3>
       <PersonForm {...formProps}/>
       <h3>Numbers</h3>
-      <Persons personsToShow={personsToShow}/>
+      <Persons personsToShow={personsToShow} handleDelete={deleteFromPhonebook}/>
     </div>
   )
 }

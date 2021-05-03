@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Note from './components/Note'
-import axios from 'axios'
+import noteService from './services/notes'
+
 
 const App = () => {
   const [notes, setNotes] = useState([])
@@ -9,15 +10,15 @@ const App = () => {
 
   useEffect(() => {
     console.log('effect')
-    axios
-      .get('http://localhost:3001/notes')
-      .then(response => {
+    noteService
+      .getAll()
+      .then(initalNotes => {
         console.log('promise fulfilled');
-        setNotes(response.data)
+        setNotes(initalNotes)
       })
   }, [])
   
-  console.log('render', notes.length, 'notes');
+  // console.log('render', notes.length, 'notes');
 
   const notesToShow = showAll ? notes : notes.filter(note => note.important)
 
@@ -25,14 +26,42 @@ const App = () => {
     event.preventDefault()
     console.log('button clicked', event.target);;
     const noteObject = {
-      id: notes.length + 1,
       content: newNote,
-      date: new Date().toISOString(),
+      date: new Date(),
       important: Math.random() < 0.5
     }
     console.log(noteObject);
-    setNotes(notes.concat(noteObject)) 
-    setNewNote('')
+    // setNotes(notes.concat(noteObject)) 
+    // setNewNote('')
+    noteService
+      .create(noteObject)
+      .then(returnedNote => {
+        console.log(returnedNote);
+        setNotes(notes.concat(returnedNote))
+        setNewNote('')
+      })
+  }
+
+  const toggleImportanceOf = (id) => {
+    const note = notes.find(n => n.id === id)
+    const changedNote = {...note, important: !note.important}
+
+    // THIS replaces the entire NOTE with the new NOTE using a PUT request.
+    // We can also just change some of the notes properties using a HTTP PATCH request
+    noteService 
+      .update(id, changedNote)
+      .then(returnedNote => {
+        setNotes(notes.map(note => note.id !== id ? note : returnedNote))
+      })
+      .catch(error => {
+        alert(
+          `the note '${note.content}' was already deleted from the server`
+        )
+        // Remove the already deleted note from the local state
+        setNotes(notes.filter(n => n.id !== id))
+      })
+
+    console.log(`importance of ${id} needs to be toggled`);
   }
 
   const handleNoteChange = (event) => {
@@ -51,7 +80,7 @@ const App = () => {
       </div>
       <ul>
         {notesToShow.map(note => 
-          <Note key={note.id} note={note}/>
+          <Note key={note.id} note={note} toggleImportance={() => toggleImportanceOf(note.id)}/>
         )}
       </ul>
       <form onSubmit={addNote}>
