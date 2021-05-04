@@ -32,14 +32,12 @@ const App = () => {
 
   const handleSearchStringChange = (event) => {
     setSearchString(event.target.value)
-    console.log(event.target.value);
   }
 
   const deleteFromPhonebook = (id) => {
     phoneService
       .deleteEntry(id)
       .then(response => {
-        console.log(response);
         setPersons(persons.filter(p => p.id !== id))
       })
   }
@@ -76,13 +74,15 @@ const App = () => {
           ...persons[found],
           number: newNumber,
         }
-        console.log(newPerson);
         phoneService
           .updateEntry(newPerson.id, newPerson)
           .then(returnedPerson => {
             setPersons(persons.map(p => p.id !== newPerson.id ? p : returnedPerson))
             setNewName('')
             setNewNumber('')
+          })
+          .catch(error => {
+            console.log(error);
           })
       } else {
         return null

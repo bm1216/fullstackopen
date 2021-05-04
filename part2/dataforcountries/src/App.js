@@ -1,29 +1,6 @@
 import React, { useState, useEffect } from 'react'
+import Country from './components/Country'
 import axios from 'axios'
-
-const Country = ({country, show}) => {
-  if (show) {
-    return (
-      <div>
-        <h2>{country.name}</h2>
-        <p>capital {country.capital}</p>
-        <p>population {country.population}</p>
-        <h3>languages</h3>
-        <ul>
-          {country.languages
-            .map((language, id) => {
-              return <li key={id}>{language.name}</li>
-            })}
-        </ul>
-        <img src={country.flag} alt="Not available"/>
-      </div>
-    )
-  } else {
-    return (
-      null
-    )
-  }
-}
 
 const Countries = ({countries}) => {
 
@@ -68,7 +45,7 @@ function App() {
 
   useEffect(() => {
     axios
-      .get('http://localhost:3001/countries')
+      .get('https://restcountries.eu/rest/v2/all')
       .then(response => {
         setCountries(response.data)
       })
