@@ -3,6 +3,7 @@ import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
 import Persons from './components/Persons'
 import phoneService from './services/Phonebook'
+import Message from './components/Message'
 
 
 const App = () => {
@@ -10,6 +11,7 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ searchString, setSearchString ] = useState('')
+  const [ operationMessage, setOperationMessage ] = useState(null)
 
   useEffect(() => {
     phoneService
@@ -65,6 +67,10 @@ const App = () => {
         .createEntry(newPerson)
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
+          setOperationMessage({content: `Added ${returnedPerson.name}`, isError: false})
+          setTimeout(() => {
+            setOperationMessage(null)
+          }, 3000)
           setNewName('')
           setNewNumber('')
         })
@@ -78,10 +84,21 @@ const App = () => {
           .updateEntry(newPerson.id, newPerson)
           .then(returnedPerson => {
             setPersons(persons.map(p => p.id !== newPerson.id ? p : returnedPerson))
+            setOperationMessage({content: `Updated ${returnedPerson.name}`, isError: false})
+            setTimeout(() => {
+              setOperationMessage(null)
+            }, 3000)
             setNewName('')
             setNewNumber('')
           })
           .catch(error => {
+            setOperationMessage({content: `Information of ${newPerson.name} has already been removed from the server.`, isError: true})
+            setTimeout(() => {
+              setOperationMessage(null)
+            }, 3000)
+            setNewName('')
+            setNewNumber('')
+            setPersons(persons.filter(p => p.id !== newPerson.id))
             console.log(error);
           })
       } else {
@@ -98,6 +115,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Message message={operationMessage}/>
       <Filter searchString={searchString} handleSearchStringChange={handleSearchStringChange}/>
       <h3>Add a new </h3>
       <PersonForm {...formProps}/>
